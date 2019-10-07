@@ -35,7 +35,20 @@ class Graph:
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+        visited_nodes = set()
+
+        def recursion_helper(vertex):
+            nonlocal visited_nodes
+            # print vertex
+            # call recursion_helper on each element of vertex  values
+            if vertex not in visited_nodes:
+                print(vertex)
+                visited_nodes.add(vertex)
+                for next_vertice in self.vertices[vertex]:
+                    recursion_helper(next_vertice)
+
+        recursion_helper(starting_vertex)
+
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
