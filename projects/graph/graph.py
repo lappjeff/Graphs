@@ -76,8 +76,7 @@ class Graph:
 
         def recursion_helper(vertex):
             nonlocal visited_nodes
-            # print vertex
-            # call recursion_helper on each element of vertex  values
+
             if vertex not in visited_nodes:
                 print(vertex)
                 visited_nodes.add(vertex)
@@ -92,18 +91,44 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        queue = Queue()
+        visited_nodes = set()
+        queue.enqueue([starting_vertex])
+
+        while queue.size() > 0:
+            path = queue.dequeue()
+            vertex = path[-1]
+            if vertex not in visited_nodes:
+                if vertex == destination_vertex:
+                    return path
+                visited_nodes.add(vertex)
+                for next_vertice in self.vertices[vertex]:
+                     new_path = list(path)
+                     new_path.append(next_vertice)
+                     queue.enqueue(new_path)
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
 
+        stack = Stack()
+        visited_nodes = set()
+        stack.push([starting_vertex])
 
-
-
+        while stack.size() > 0:
+            path = stack.pop()
+            vertex = path[-1]
+            if vertex not in visited_nodes:
+                if vertex == destination_vertex:
+                    return path
+                visited_nodes.add(vertex)
+                for next_vertice in self.vertices[vertex]:
+                     new_path = list(path)
+                     new_path.append(next_vertice)
+                     stack.push(new_path)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -140,7 +165,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     print("starting DFT")
-    graph.dft(1)
+    # graph.dft(1)
 
     '''
     Valid BFT paths:
@@ -158,7 +183,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 5, 6
     '''
     print("starting BFT")
-    graph.bft(1)
+    # graph.bft(1)
 
     '''
     Valid DFT recursive paths:
@@ -168,13 +193,13 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     print("starting dft_recursive")
-    graph.dft_recursive(1)
+    # graph.dft_recursive(1)
 
     '''
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    print(graph.bfs(1, 6))
+    # print(graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
@@ -182,3 +207,9 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     print(graph.dfs(1, 6))
+
+# starting vertex is beginWord
+#
+# use bft to find all adjacent nodes to vertex
+#
+# destination is endWord
