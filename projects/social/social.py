@@ -67,28 +67,43 @@ class SocialGraph:
         self.friendships = {}
 
         run_count = 0
+        for i in range(0, numUsers):
+            self.addUser(f"User {i}")
 
-        max_friends = round(numUsers / avgFriendships)
-        if numUsers < avgFriendships:
-            print("Please make sure your user count is greater than the average count")
-            return None
-        else:
-            users = []
-            # Add users
-            for number in range(numUsers):
-                self.addUser(number + 1)
-                users.append(number + 1)
-            # Create friendships
+        possible_friendships = []
 
-            for user_id in users:
-                # add x number of friends, where x is a random num in range 0 to round(numUsers / avgFriendships)
-                for x in range(random.randrange(0, stop = avgFriendships + 1)):
-                    random.shuffle(users)
-                    # call addFriendship(number, x)
-                    if user_id < users[x]:
-                        self.addFriendship(user_id, users[x])
-                        run_count += 1
-                        # add users[x] to visited to ensure it's not revisited
+        for userID in self.users:
+            for friendID in range(userID + 1, self.lastID + 1):
+                possible_friendships.append((userID, friendID))
+
+        random.shuffle(possible_friendships)
+
+        for i in range((numUsers * avgFriendships) // 2):
+            friendship = possible_friendships[i]
+            self.addFriendship(friendship[0], friendship[1])
+            run_count += 1
+
+        # max_friends = round(numUsers / avgFriendships)
+        # if numUsers < avgFriendships:
+        #     print("Please make sure your user count is greater than the average count")
+        #     return None
+        # else:
+        #     users = []
+        #     # Add users
+        #     for number in range(numUsers):
+        #         self.addUser(number + 1)
+        #         users.append(number + 1)
+        #     # Create friendships
+        #
+        #     for user_id in users:
+        #         # add x number of friends, where x is a random num in range 0 to round(numUsers / avgFriendships)
+        #         for x in range(random.randrange(0, stop = avgFriendships + 1)):
+        #             random.shuffle(users)
+        #             # call addFriendship(number, x)
+        #             if user_id < users[x]:
+        #                 self.addFriendship(user_id, users[x])
+        #                 run_count += 1
+        #                 # add users[x] to visited to ensure it's not revisited
 
         print(f"************Ran addFriendship {run_count} times")
     def getAllSocialPaths(self, userID):
@@ -111,10 +126,8 @@ class SocialGraph:
             if vertex not in visited:
                 visited[vertex] = path
 
-
-            for neighbor in self.friendships[vertex]:
-                if neighbor not in visited:
-                    path_copy = list(path)
+                for neighbor in self.friendships[vertex]:
+                    path_copy = path.copy()
                     path_copy.append(neighbor)
                     q.enqueue(path_copy)
 
@@ -123,7 +136,7 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(10, 2)
+    sg.populateGraph(1000, 10)
     # sg.populateGraph(1000, 20)
     print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
